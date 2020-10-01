@@ -4,16 +4,32 @@ environment:
   matrix:
     - platform: x86-windows
       cmake_arch: Win32
+      compiler: msvc
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
     - platform: x64-windows
       cmake_arch: x64
+      compiler: msvc
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
-
+    - platform: x86-windows
+      cmake_arch: Win32
+      compiler: clang
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
+    - platform: x64-windows
+      cmake_arch: x64
+      compiler: clang
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
 
 configuration:
   - Debug
   - Release
-  - MinSizeRel
+
+for:
+  -
+    compiler: clang
+    before_build:
+      - echo Echoed from the clang specific build
+      - set CC=clang-cl
+      - set CMAKE_CXX_COMPILER=clang-cl
 
 cache: C:\Tools\vcpkg\installed\
 
