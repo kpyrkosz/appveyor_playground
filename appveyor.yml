@@ -21,8 +21,6 @@ for:
     environment:
       cmake_build_config: Debug
       config_cflags: -g -Og -Wall -Wextra
-      - SET CFLAGS=%base_cflags% %config_cflags%
-      - SET CXXFLAGS=%CFLAGS%
 
   -
     matrix:
