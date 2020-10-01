@@ -6,15 +6,15 @@ environment:
       cmake_arch: Win32
     - platform: x64-windows
       cmake_arch: x64
+  matrix:
+    - toolchain: llvm
+    - toolchain: v142
 
 configuration:
   - Debug
   - Release
   - MinSizeRel
 
-toolchain:
-  - "-Tllvm"
-  - ""
 cache: C:\Tools\vcpkg\installed\
 
 init:
