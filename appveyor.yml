@@ -32,7 +32,7 @@ for:
     environment:
       cmake_build_config: Debug
     before_build:
-      - SET CFLAGS="%base_cflags% -g -Og -Wall -Wextra"
+      - SET CFLAGS=%base_cflags% -g -Og -Wall -Wextra
       - SET CXXFLAGS=%CFLAGS%
 
   -
@@ -42,7 +42,7 @@ for:
     environment:
       cmake_build_config: Release
     before_build:
-      - SET CFLAGS="%base_cflags% -O2"
+      - SET CFLAGS=%base_cflags% -O2
       - SET CXXFLAGS=%CFLAGS%
 
 cache: C:\Tools\vcpkg\installed\
@@ -51,7 +51,7 @@ init:
   - echo Echoed from init script
   - C:\Tools\vcpkg\vcpkg version
   - cmake --version
-  - clang-cl %arch_cflags% --version
+  - clang-cl --version
 
 install:
   - C:\Tools\vcpkg\vcpkg install gtest:%vcpkg_platform%
