@@ -4,32 +4,31 @@ environment:
   matrix:
     - platform: x86-windows
       cmake_arch: Win32
-      compiler: msvc
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
     - platform: x64-windows
       cmake_arch: x64
-      compiler: msvc
-      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
-    - platform: x86-windows
-      cmake_arch: Win32
-      compiler: clang
-      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
-    - platform: x64-windows
-      cmake_arch: x64
-      compiler: clang
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
 
 configuration:
   - Debug
   - Release
+  - DebugClang
 
 for:
   -
-    compiler: clang
-    before_build:
+    configuration: DebugClang
+    build_script:
       - echo Echoed from the clang specific build
       - set CC=clang-cl
+      - cd %APPVEYOR_BUILD_FOLDER%
+      - call "%vs_env_script%"
       - set CMAKE_CXX_COMPILER=clang-cl
+      - mkdir build
+      - cd build
+      - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -A%cmake_arch%
+      - cmake --build . --config %configuration%
+
+
 
 cache: C:\Tools\vcpkg\installed\
 
