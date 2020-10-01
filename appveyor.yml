@@ -27,7 +27,7 @@ for:
       - set CMAKE_CXX_COMPILER=clang-cl
       - mkdir build
       - cd build
-      - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -A%cmake_arch% -G ninja
+      - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -A%cmake_arch% -G Ninja
       - cmake --build . --config Debug
 
 
