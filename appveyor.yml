@@ -10,8 +10,8 @@ environment:
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
 
 configuration:
-  - Debug
-  - Release
+  #  - Debug
+  #  - Release
   - DebugClang
 
 for:
@@ -24,10 +24,10 @@ for:
       - set CC=clang-cl
       - cd %APPVEYOR_BUILD_FOLDER%
       - call "%vs_env_script%"
-      - set CMAKE_CXX_COMPILER=clang-cl
+      - set CMAKE_C_COMPILER=clang-cl
       - mkdir build
       - cd build
-      - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -A%cmake_arch% -G Ninja
+      - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
       - cmake --build . --config Debug
 
 
