@@ -35,7 +35,7 @@ for:
       - SET CFLAGS="%base_cflags% -g -Og -Wall -Wextra"
       - SET CXXFLAGS=%CFLAGS%
 
- -
+  -
     matrix:
       only:
         - configuration: Release
