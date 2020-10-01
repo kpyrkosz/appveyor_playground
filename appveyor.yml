@@ -12,6 +12,8 @@ configuration:
   - Release
   - MinSizeRel
 
+cache: C:\Tools\vcpkg\installed\
+
 init:
   - echo Echoed from init script
   - C:\Tools\vcpkg\vcpkg version
