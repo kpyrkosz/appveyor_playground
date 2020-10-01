@@ -31,7 +31,7 @@ for:
         - configuration: Debug
     environment:
       CFLAGS: "%base_cflags% -g -Og -Wall -Wextra"
-      CXXFLAGS: %CFLAGS%
+      CXXFLAGS: "%CFLAGS%"
       cmake_build_config: Debug
  -
     matrix:
@@ -39,7 +39,7 @@ for:
         - configuration: Release
     environment:
       CFLAGS: "%base_cflags% -O2"
-      CXXFLAGS: %CFLAGS%
+      CXXFLAGS: "%CFLAGS%"
       cmake_build_config: Release
 
 cache: C:\Tools\vcpkg\installed\
