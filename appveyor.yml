@@ -4,10 +4,6 @@ environment:
   matrix:
     - compiler: clang
     - compiler: msvc
-    # msvc x32
-      additional_cmake_commandline: -AWin32
-    # msvc x64
-      additional_cmake_commandline: -Ax64
 
 platform:
   - x86-windows
