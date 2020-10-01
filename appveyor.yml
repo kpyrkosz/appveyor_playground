@@ -30,17 +30,19 @@ for:
       only:
         - configuration: Debug
     environment:
-      CFLAGS: "%base_cflags% -g -Og -Wall -Wextra"
-      CXXFLAGS: "%CFLAGS%"
       cmake_build_config: Debug
+    before_build:
+      - SET CFLAGS="%base_cflags% -g -Og -Wall -Wextra"
+      - SET CXXFLAGS=%CFLAGS%
  -
     matrix:
       only:
         - configuration: Release
     environment:
-      CFLAGS: "%base_cflags% -O2"
-      CXXFLAGS: "%CFLAGS%"
       cmake_build_config: Release
+    before_build:
+      - SET CFLAGS="%base_cflags% -O2"
+      - SET CXXFLAGS=%CFLAGS%
 
 cache: C:\Tools\vcpkg\installed\
 
@@ -53,12 +55,10 @@ init:
 install:
   - C:\Tools\vcpkg\vcpkg install gtest:%vcpkg_platform%
 
-before_build:
+build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir build
   - cd build
-
-build_script:
   - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake %additional_cmake_commandline%
   - cmake --build . --config %cmake_build_config%
 
