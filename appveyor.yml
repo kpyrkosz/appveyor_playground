@@ -21,12 +21,11 @@ for:
         - configuration: DebugClang
     build_script:
       - echo Echoed from the clang specific build
-      - set CC=clang-cl
       - cd %APPVEYOR_BUILD_FOLDER%
-      - call "%vs_env_script%"
-      - set CMAKE_C_COMPILER=clang-cl
       - mkdir build
       - cd build
+      - set CC=clang-cl
+      - set CXX=clang-cl
       - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
       - cmake --build . --config Debug
 
