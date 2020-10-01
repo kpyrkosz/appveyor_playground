@@ -4,6 +4,7 @@ environment:
   matrix:
     - platform: x86-windows
       cmake_arch: Win32
+      env_cflags: -m32
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
     - platform: x64-windows
       cmake_arch: x64
@@ -27,6 +28,7 @@ for:
       - call "%vs_env_script%"
       - set CC=clang-cl
       - set CXX=clang-cl
+      - set CFLAGS=%env_cflags%
       - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
       - cmake --build . --config Debug
 
