@@ -1,8 +1,10 @@
 image: Visual Studio 2017
 
-platform:
-  - x86-windows
-  - x64-windows
+matrix:
+  - platform: x86-windows
+    cmake_arch: Win32
+  - platform: x64-windows
+    cmake_arch: Win64
 
 configuration:
   - Debug
@@ -21,7 +23,7 @@ build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake
+  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -A%cmake_arch%
   - cmake --build . --config %configuration%
 
 test_script:
