@@ -2,23 +2,16 @@ image: Visual Studio 2019
 
 environment:
   matrix:
-    # win clang x32
-    - CC: clang-cl
-      CXX: clang-cl
-      base_cflags: -m32
-      vcpkg_platform: x86-windows
-      additional_cmake_commandline: -GNinja
-    # win clang x64
-    - CC: clang-cl
-      CXX: clang-cl
-      vcpkg_platform: x64-windows
-      additional_cmake_commandline: -GNinja
+    - compiler: clang
+    - compiler: msvc
     # msvc x32
-    - vcpkg_platform: x86-windows
       additional_cmake_commandline: -AWin32
     # msvc x64
-    - vcpkg_platform: x64-windows
       additional_cmake_commandline: -Ax64
+
+platform:
+  - x86-windows
+  - x64-windows
 
 configuration:
   - Debug
@@ -31,8 +24,8 @@ for:
         - configuration: Debug
     environment:
       cmake_build_config: Debug
-    before_build:
-      - SET CFLAGS=%base_cflags% -g -Og -Wall -Wextra
+      config_cflags: -g -Og -Wall -Wextra
+      - SET CFLAGS=%base_cflags% %config_cflags%
       - SET CXXFLAGS=%CFLAGS%
 
   -
@@ -41,9 +34,55 @@ for:
         - configuration: Release
     environment:
       cmake_build_config: Release
-    before_build:
-      - SET CFLAGS=%base_cflags% -O2
-      - SET CXXFLAGS=%CFLAGS%
+      config_cflags: -O2
+
+  -
+    matrix:
+      only:
+        - platform: x86-windows
+    environment:
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
+
+  -
+    matrix:
+      only:
+        - platform: x64-windows
+    environment:
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
+
+  -
+    matrix:
+      only:
+        - platform: x86-windows
+          compiler: clang
+    environment:
+      base_cflags: -m32
+
+  -
+    matrix:
+      only:
+        - compiler: clang
+    environment:
+      CC: clang-cl
+      CXX: clang-cl
+      additional_cmake_commandline: -GNinja
+
+  -
+    matrix:
+      only:
+        - platform: x86-windows
+          compiler: msvc
+    environment:
+      additional_cmake_commandline: -AWin32
+
+  -
+    matrix:
+      only:
+        - platform: x64-windows
+          compiler: msvc
+    environment:
+      additional_cmake_commandline: -Ax64
+
 
 cache: C:\Tools\vcpkg\installed\
 
@@ -60,6 +99,9 @@ build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir build
   - cd build
+  - call "%vs_env_script%"
+  - SET CFLAGS=%base_cflags% %config_cflags%
+  - SET CXXFLAGS=%CFLAGS%
   - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake %additional_cmake_commandline%
   - cmake --build . --config %cmake_build_config%
 
