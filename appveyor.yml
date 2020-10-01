@@ -24,6 +24,7 @@ for:
       - cd %APPVEYOR_BUILD_FOLDER%
       - mkdir build
       - cd build
+      - call "%vs_env_script%"
       - set CC=clang-cl
       - set CXX=clang-cl
       - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
