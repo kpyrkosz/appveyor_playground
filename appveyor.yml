@@ -2,51 +2,45 @@ image: Visual Studio 2019
 
 environment:
   matrix:
-    - platform: x86-windows
-      cmake_arch: Win32
-      arch_cflags: -m32
-      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
-    - platform: x64-windows
-      cmake_arch: x64
-      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
-    - platform: x86-windows
-      cmake_arch: Win32
-      arch_cflags: -m32
-      compiler: mingw-gcc
-      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
-
+    # win clang x32
+    - CC: clang-cl
+      CXX: clang-cl
+      base_cflags: -m32
+      vcpkg_platform: x86-windows
+      additional_cmake_commandline: -GNinja
+    # win clang x64
+    - CC: clang-cl
+      CXX: clang-cl
+      vcpkg_platform: x64-windows
+      additional_cmake_commandline: -GNinja
+    # msvc x32
+    - vcpkg_platform: x86-windows
+      additional_cmake_commandline: -AWin32
+    # msvc x64
+    - vcpkg_platform: x64-windows
+      additional_cmake_commandline: -Ax64
 
 configuration:
-  #  - Debug
-  #  - Release
-  - DebugClang
-  - ReleaseClang
+  - Debug
+  - Release
 
 for:
   -
     matrix:
       only:
-        - configuration: DebugClang
-    build_script:
-      - echo Echoed from the clang specific build
-      - set CC=clang-cl
-      - set CXX=clang-cl
-      - set CFLAGS=%arch_cflags%
-      - set CXXFLAGS=%arch_cflags%
-      - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
-      - cmake --build . --config Debug
-  -
+        - configuration: Debug
+    environment:
+      CFLAGS: %base_cflags% -g -Og -Wall -Wextra
+      CXXFLAGS: %CFLAGS%
+      cmake_build_config: Debug
+ -
     matrix:
       only:
-        - configuration: ReleaseClang
-    build_script:
-      - echo Echoed from the clang specific build
-      - set CC=clang-cl
-      - set CXX=clang-cl
-      - set CFLAGS=%arch_cflags%
-      - set CXXFLAGS=%arch_cflags%
-      - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
-      - cmake --build . --config Release
+        - configuration: Release
+    environment:
+      CFLAGS: %base_cflags% -O2
+      CXXFLAGS: %CFLAGS%
+      cmake_build_config: Release
 
 cache: C:\Tools\vcpkg\installed\
 
@@ -57,17 +51,16 @@ init:
   - clang-cl %arch_cflags% --version
 
 install:
-  - C:\Tools\vcpkg\vcpkg install gtest:%platform%
+  - C:\Tools\vcpkg\vcpkg install gtest:%vcpkg_platform%
 
 before_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir build
   - cd build
-  - call "%vs_env_script%"
 
 build_script:
-  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -A%cmake_arch%
-  - cmake --build . --config %configuration%
+  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake %additional_cmake_commandline%
+  - cmake --build . --config %cmake_build_config%
 
 test_script:
-  - cmake --build . --config %configuration% --target run_executable
+  - cmake --build . --config %cmake_build_config% --target run_executable
