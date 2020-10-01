@@ -30,7 +30,7 @@ for:
       only:
         - configuration: Debug
     environment:
-      CFLAGS: %base_cflags% -g -Og -Wall -Wextra
+      CFLAGS: "%base_cflags% -g -Og -Wall -Wextra"
       CXXFLAGS: %CFLAGS%
       cmake_build_config: Debug
  -
@@ -38,7 +38,7 @@ for:
       only:
         - configuration: Release
     environment:
-      CFLAGS: %base_cflags% -O2
+      CFLAGS: "%base_cflags% -O2"
       CXXFLAGS: %CFLAGS%
       cmake_build_config: Release
 
