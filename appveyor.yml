@@ -16,7 +16,9 @@ configuration:
 
 for:
   -
-    configuration: DebugClang
+    matrix:
+      only:
+        - configuration: DebugClang
     build_script:
       - echo Echoed from the clang specific build
       - set CC=clang-cl
