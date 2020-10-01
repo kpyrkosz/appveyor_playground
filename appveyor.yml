@@ -31,7 +31,7 @@ build_script:
   - call "%vs_env_script%"
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake
+  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -A%cmake_arch%
   - cmake --build . --config %configuration%
 
 test_script:
