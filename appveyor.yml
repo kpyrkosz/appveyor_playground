@@ -13,6 +13,7 @@ configuration:
   - Debug
   - Release
 
+#i believe it is doable in much cleaner way...
 for:
   -
     matrix:
@@ -21,7 +22,7 @@ for:
           platform: x86-windows
           compiler: clang
     environment:
-      config_cflags: -g -Og -Wall -Wextra
+      config_cflags: -Og -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
       base_cflags: -m32
       CC: clang-cl
@@ -69,7 +70,7 @@ for:
           platform: x64-windows
           compiler: clang
     environment:
-      config_cflags: -g -Og -Wall -Wextra
+      config_cflags: -Og -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
       CC: clang-cl
       CXX: clang-cl
