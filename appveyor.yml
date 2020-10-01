@@ -28,7 +28,7 @@ install:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - call %vs_env_script%
+  - call "%vs_env_script%"
   - mkdir build
   - cd build
   - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake
