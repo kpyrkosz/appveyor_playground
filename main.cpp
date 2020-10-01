@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <array>
-#include <boost/thread.hpp>
+#include <thread>
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -12,8 +12,8 @@ template <typename InputIt> void fancy_sort(InputIt begin, InputIt end) {
       begin, end, [pivot](const auto &elem) { return elem < pivot; });
   auto midpoint2 = std::partition(
       midpoint, end, [pivot](const auto &elem) { return !(pivot < elem); });
-  boost::thread left([begin, midpoint] { fancy_sort(begin, midpoint); });
-  boost::thread right([midpoint2, end] { fancy_sort(midpoint2, end); });
+  std::thread left([begin, midpoint] { fancy_sort(begin, midpoint); });
+  std::thread right([midpoint2, end] { fancy_sort(midpoint2, end); });
   left.join();
   right.join();
 }

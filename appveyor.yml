@@ -15,7 +15,7 @@ init:
   - cmake --version
 
 install:
-  - C:\Tools\vcpkg\vcpkg install gtest:%platform% boost-thread:%platform%
+  - C:\Tools\vcpkg\vcpkg install gtest:%platform%
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
