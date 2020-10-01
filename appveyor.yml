@@ -4,7 +4,7 @@ environment:
   matrix:
     - platform: x86-windows
       cmake_arch: Win32
-      env_cflags: -m32
+      arch_cflags: -m32
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
     - platform: x64-windows
       cmake_arch: x64
@@ -14,6 +14,7 @@ configuration:
   #  - Debug
   #  - Release
   - DebugClang
+  - ReleaseClang
 
 for:
   -
@@ -22,18 +23,24 @@ for:
         - configuration: DebugClang
     build_script:
       - echo Echoed from the clang specific build
-      - cd %APPVEYOR_BUILD_FOLDER%
-      - mkdir build
-      - cd build
-      - call "%vs_env_script%"
       - set CC=clang-cl
       - set CXX=clang-cl
-      - set CFLAGS=%env_cflags%
-      - set CXXFLAGS=%env_cflags%
+      - set CFLAGS=%arch_cflags%
+      - set CXXFLAGS=%arch_cflags%
       - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
       - cmake --build . --config Debug
-
-
+  -
+    matrix:
+      only:
+        - configuration: ReleaseClang
+    build_script:
+      - echo Echoed from the clang specific build
+      - set CC=clang-cl
+      - set CXX=clang-cl
+      - set CFLAGS=%arch_cflags%
+      - set CXXFLAGS=%arch_cflags%
+      - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
+      - cmake --build . --config Release
 
 cache: C:\Tools\vcpkg\installed\
 
@@ -41,16 +48,18 @@ init:
   - echo Echoed from init script
   - C:\Tools\vcpkg\vcpkg version
   - cmake --version
-  - clang-cl %env_cflags% --version
+  - clang-cl %arch_cflags% --version
 
 install:
   - C:\Tools\vcpkg\vcpkg install gtest:%platform%
 
-build_script:
+before_build:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - call "%vs_env_script%"
   - mkdir build
   - cd build
+  - call "%vs_env_script%"
+
+build_script:
   - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -A%cmake_arch%
   - cmake --build . --config %configuration%
 
