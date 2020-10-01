@@ -29,6 +29,7 @@ for:
       - set CC=clang-cl
       - set CXX=clang-cl
       - set CFLAGS=%env_cflags%
+      - set CXXFLAGS=%env_cflags%
       - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja
       - cmake --build . --config Debug
 
@@ -40,7 +41,7 @@ init:
   - echo Echoed from init script
   - C:\Tools\vcpkg\vcpkg version
   - cmake --version
-  - clang-cl --version
+  - clang-cl %env_cflags% --version
 
 install:
   - C:\Tools\vcpkg\vcpkg install gtest:%platform%
