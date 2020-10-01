@@ -4,10 +4,10 @@ environment:
   matrix:
     - platform: x86-windows
       cmake_arch: Win32
-      toolchain: "-TLLVM_v142"
+      toolchain: "-TLLVM"
     - platform: x64-windows
       cmake_arch: x64
-      toolchain: "-TLLVM_v142"
+      toolchain: "-TLLVM"
     - platform: x86-windows
       cmake_arch: Win32
       toolchain: ""
