@@ -11,13 +11,11 @@ configuration:
 
 init:
   - echo Echoed from init script
-  - cd C:\Tools\vcpkg
-  - vcpkg version
+  - C:\Tools\vcpkg\vcpkg version
   - cmake --version
 
 install:
-  - cd C:\Tools\vcpkg
-  - vcpkg install gtest:%platform% boost-thread:%platform%
+  - C:\Tools\vcpkg\vcpkg install gtest:%platform% boost-thread:%platform%
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
