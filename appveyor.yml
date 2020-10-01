@@ -9,6 +9,12 @@ environment:
     - platform: x64-windows
       cmake_arch: x64
       vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
+    - platform: x86-windows
+      cmake_arch: Win32
+      arch_cflags: -m32
+      compiler: mingw-gcc
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
+
 
 configuration:
   #  - Debug
