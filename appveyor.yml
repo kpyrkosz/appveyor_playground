@@ -18,45 +18,26 @@ for:
     matrix:
       only:
         - configuration: Debug
+          platform: x86-windows
+          compiler: clang
     environment:
-      cmake_build_config: Debug
       config_cflags: -g -Og -Wall -Wextra
-
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
+      base_cflags: -m32
+      CC: clang-cl
+      CXX: clang-cl
+      additional_cmake_commandline: -GNinja
+  
   -
     matrix:
       only:
         - configuration: Release
-    environment:
-      cmake_build_config: Release
-      config_cflags: -O2
-
-  -
-    matrix:
-      only:
-        - platform: x86-windows
-    environment:
-      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
-
-  -
-    matrix:
-      only:
-        - platform: x64-windows
-    environment:
-      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
-
-  -
-    matrix:
-      only:
-        - platform: x86-windows
+          platform: x86-windows
           compiler: clang
     environment:
+      config_cflags: -O2
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
       base_cflags: -m32
-
-  -
-    matrix:
-      only:
-        - compiler: clang
-    environment:
       CC: clang-cl
       CXX: clang-cl
       additional_cmake_commandline: -GNinja
@@ -64,19 +45,68 @@ for:
   -
     matrix:
       only:
-        - platform: x86-windows
+        - configuration: Debug
+          platform: x86-windows
           compiler: msvc
     environment:
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
       additional_cmake_commandline: -AWin32
 
   -
     matrix:
       only:
-        - platform: x64-windows
+        - configuration: Release
+          platform: x86-windows
           compiler: msvc
     environment:
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars32.bat"
+      additional_cmake_commandline: -AWin32
+
+  -
+    matrix:
+      only:
+        - configuration: Debug
+          platform: x64-windows
+          compiler: clang
+    environment:
+      config_cflags: -g -Og -Wall -Wextra
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
+      CC: clang-cl
+      CXX: clang-cl
+      additional_cmake_commandline: -GNinja
+
+  -
+    matrix:
+      only:
+        - configuration: Release
+          platform: x64-windows
+          compiler: clang
+    environment:
+      config_cflags: -O2
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
+      CC: clang-cl
+      CXX: clang-cl
+      additional_cmake_commandline: -GNinja
+
+  -
+    matrix:
+      only:
+        - configuration: Debug
+          platform: x64-windows
+          compiler: msvc
+    environment:
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
       additional_cmake_commandline: -Ax64
 
+  -
+    matrix:
+      only:
+        - configuration: Release
+          platform: x64-windows
+          compiler: msvc
+    environment:
+      vs_env_script: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
+      additional_cmake_commandline: -Ax64
 
 cache: C:\Tools\vcpkg\installed\
 
@@ -97,7 +127,7 @@ build_script:
   - SET CFLAGS=%base_cflags% %config_cflags%
   - SET CXXFLAGS=%CFLAGS%
   - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake %additional_cmake_commandline%
-  - cmake --build . --config %cmake_build_config%
+  - cmake --build . --config %configuration%
 
 test_script:
-  - cmake --build . --config %cmake_build_config% --target run_executable
+  - cmake --build . --config %configuration% --target run_executable
