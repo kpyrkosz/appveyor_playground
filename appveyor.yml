@@ -87,7 +87,7 @@ init:
   - clang-cl --version
 
 install:
-  - C:\Tools\vcpkg\vcpkg install gtest:%vcpkg_platform%
+  - C:\Tools\vcpkg\vcpkg install gtest:%platform%
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
