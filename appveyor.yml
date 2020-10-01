@@ -1,0 +1,26 @@
+image: Visual Studio 2017
+
+platform:
+  - x86-windows
+  - x64-windows
+
+configuration:
+  - Debug
+  - Release
+  - MinSizeRel
+
+init:
+  - echo Echoed from init script
+  - C:\Tools\vcpkg version
+  - cmake --version
+
+install:
+  - C:\Tools\vcpkg install gtest:%platform% boost-thread:%platform%
+
+build_script:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build . --config %configuration%
+
